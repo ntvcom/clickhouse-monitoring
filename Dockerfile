@@ -31,15 +31,15 @@ ENV NODE_ENV=production \
 
 RUN addgroup --system --gid 1001 app && \
     adduser --system --uid 1001 app && \
-    mkdir .next && \
-    chown app:app .next
+    mkdir .next-prod && \
+    chown app:app .next-prod
 
 # IMPORTANT: .next-prod/standalone already contains all necessary production dependencies
 # DO NOT copy node_modules from deps stage - this causes 438MB+ duplication
 # Note: Production builds use .next-prod directory (configured in next.config.ts)
 COPY --from=builder --chown=app:app /app/.next-prod/standalone ./
-COPY --from=builder --chown=app:app /app/.next-prod/static ./.next/static
-COPY --from=builder /app/public/* ./
+COPY --from=builder --chown=app:app /app/.next-prod/static ./.next-prod/static
+COPY --from=builder /app/public ./public
 
 USER app
 
